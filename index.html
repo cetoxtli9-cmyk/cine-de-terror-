@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cine de Terror</title>
+    <style>
+        body {
+            background-color: #0d0d0d;
+            color: #ffffff;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #e50914;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+
+        .contenedor-buscador {
+            max-width: 500px;
+            margin: 0 auto 25px auto;
+        }
+
+        .input-buscador {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 16px;
+            background-color: #1a1a1a;
+            border: 1px solid #e50914;
+            border-radius: 25px;
+            color: #ffffff;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .input-buscador::placeholder {
+            color: #888;
+        }
+
+        .catalogo {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .tarjeta {
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 4px 10px rgba(229, 9, 20, 0.2);
+            text-align: center;
+        }
+
+        .poster {
+            width: 100%;
+            max-height: 350px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+
+        .tarjeta h2 {
+            margin: 10px 0 5px 0;
+            color: #ff4d4d;
+        }
+
+        .genero {
+            font-size: 12px;
+            background-color: #333;
+            padding: 4px 8px;
+            border-radius: 4px;
+            color: #ccc;
+        }
+
+        .sinopsis {
+            color: #aaa;
+            font-size: 14px;
+            line-height: 1.4;
+            text-align: left;
+        }
+
+        .btn-like {
+            background-color: #222;
+            color: #fff;
+            border: 1px solid #e50914;
+            padding: 10px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .btn-like.like-activo {
+            background-color: #e50914;
+            color: white;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Películas de Terror</h1>
+
+    <div class="contenedor-buscador">
+        <input 
+            type="text" 
+            id="buscador" 
+            class="input-buscador" 
+            placeholder="🔍 Buscar película o género..." 
+            onkeyup="filtrarPeliculas()"
+        >
+    </div>
+
+    <div class="catalogo" id="catalogo">
+
+        <!-- Película 1 -->
+        <div class="tarjeta" data-id="peli_exorcista">
+            <img src="https://images.unsplash.com/photo-1509248961158-e54f6934749c?w=500" class="poster">
+            <h2>El Exorcista</h2>
+            <span class="genero">Posesión / Paranormal</span>
+            <p class="sinopsis">Una niña es poseída por una entidad demoníaca y su madre busca la ayuda de dos sacerdotes.</p>
+            <button class="btn-like" onclick="darLike(this)">
+                ❤️ <span class="texto-like">Me gusta</span> (<span class="contador">0</span>)
+            </button>
+        </div>
+
+        <!-- Película 2 -->
+        <div class="tarjeta" data-id="peli_conjuro">
+            <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500" class="poster">
+            <h2>El Conjuro</h2>
+            <span class="genero">Sobrenatural</span>
+            <p class="sinopsis">Investigadores paranormales ayudan a una familia aterrorizada por una presencia oscura.</p>
+            <button class="btn-like" onclick="darLike(this)">
+                ❤️ <span class="texto-like">Me gusta</span> (<span class="contador">0</span>)
+            </button>
+        </div>
+
+        <!-- Película 3 -->
+        <div class="tarjeta" data-id="peli_siniestro">
+            <img src="https://images.unsplash.com/photo-1509114397022-ed747cca3f65?w=500" class="poster">
+            <h2>Siniestro</h2>
+            <span class="genero">Misterio / Psicológico</span>
+            <p class="sinopsis">Un escritor de crímenes reales descubre una caja de grabaciones caseras que ponen en peligro a su familia.</p>
+            <button class="btn-like" onclick="darLike(this)">
+                ❤️ <span class="texto-like">Me gusta</span> (<span class="contador">0</span>)
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        // Cargar los likes guardados en cuanto se abre la página
+        document.addEventListener("DOMContentLoaded", function() {
+            let tarjetas = document.querySelectorAll('.tarjeta');
+
+            tarjetas.forEach(function(tarjeta) {
+                let id = tarjeta.getAttribute('data-id');
+                let guardado = localStorage.getItem(id);
+
+                if (guardado === "activo") {
+                    let boton = tarjeta.querySelector('.btn-like');
+                    let contadorElemento = boton.querySelector('.contador');
+                    let textoElemento = boton.querySelector('.texto-like');
+
+                    boton.classList.add('like-activo');
+                    contadorElemento.innerText = "1";
+                    textoElemento.innerText = "¡Te gusta!";
+                }
+            });
+        });
+
+        // Función para cambiar estado y guardar en localStorage
+        function darLike(boton) {
+            let tarjeta = boton.closest('.tarjeta');
+            let id = tarjeta.getAttribute('data-id');
+
+            let contadorElemento = boton.querySelector('.contador');
+            let textoElemento = boton.querySelector('.texto-like');
+
+            if (boton.classList.contains('like-activo')) {
+                boton.classList.remove('like-activo');
+                contadorElemento.innerText = "0";
+                textoElemento.innerText = "Me gusta";
+                // Elimina el registro guardado
+                localStorage.removeItem(id);
+            } else {
+                boton.classList.add('like-activo');
+                contadorElemento.innerText = "1";
+                textoElemento.innerText = "¡Te gusta!";
+                // Guarda el registro con valor "activo"
+                localStorage.setItem(id, "activo");
+            }
+        }
+
+        // Función para el Buscador
+        function filtrarPeliculas() {
+            let textoBusqueda = document.getElementById('buscador').value.toLowerCase();
+            let tarjetas = document.querySelectorAll('.tarjeta');
+
+            tarjetas.forEach(function(tarjeta) {
+                let contenido = tarjeta.innerText.toLowerCase();
+                if (contenido.includes(textoBusqueda)) {
+                    tarjeta.style.display = "block";
+                } else {
+                    tarjeta.style.display = "none";
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>
