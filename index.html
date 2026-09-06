@@ -255,69 +255,99 @@
                 catalogo.innerHTML += tarjetaHTML;
             });
         }
+// Cargar librería de Supabase
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
 
-        function agregarPelicula() {
-            let titulo = document.getElementById("titulo").value.trim();
-            let genero = document.getElementById("genero").value.trim();
-            let imagen = document.getElementById("imagen").value.trim();
-            let sinopsis = document.getElementById("sinopsis").value.trim();
+// Configuración de Supabase
+const SUPABASE_URL = "https://ctrmjdwwvyxpzwgqsapd.supabase.co";
+const SUPABASE_KEY = "Sb_publishable_9WPjJ6rpXsGzXyT0rYBhGw_DeRMp99_";
+const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-            if (!titulo || !genero || !sinopsis) {
-                alert("Por favor completa título, género y sinopsis.");
-                return;
-            }
+document.addEventListener("DOMContentLoaded", () => {
+  cargarPeliculas();
+  escucharCambiosEnTiempoReal();
+});
 
-            if (!imagen) {
-                imagen = "https://images.unsplash.com/photo-1509114397022-ed747cca3f65?w=500";
-            }
+async function cargarPeliculas() {
+  const { data, error } = await _supabase
+    .from("peliculas")
+    .select("*")
+    .order("id", { ascending: false });
 
-            let nuevaPeli = {
-                id: "peli_" + Date.now(),
-                titulo: titulo,
-                genero: genero,
-                imagen: imagen,
-                sinopsis: sinopsis
-            };
+  if (error) {
+    console.error("Error al cargar:", error.message);
+    return;
+  }
+  renderizarCatalogo(data);
+}
 
-            let peliculasGuardadas = JSON.parse(localStorage.getItem("mis_peliculas")) || [];
-            peliculasGuardadas.unshift(nuevaPeli);
-            localStorage.setItem("mis_peliculas", JSON.stringify(peliculasGuardadas));
+async function agregarPelicula() {
+  let titulo = document.getElementById("titulo").value.trim();
+  let genero = document.getElementById("genero").value.trim();
+  let imagen = document.getElementById("imagen").value.trim();
+  let sinopsis = document.getElementById("sinopsis").value.trim();
 
-            document.getElementById("titulo").value = "";
-            document.getElementById("genero").value = "";
-            document.getElementById("imagen").value = "";
-            document.getElementById("sinopsis").value = "";
+  if (!titulo || !genero || !sinopsis) {
+    alert("Por favor completa título, género y sinopsis.");
+    return;
+  }
 
-            renderizarCatalogo(peliculasGuardadas);
-            alert("¡Película agregada con éxito!");
-        }
+  if (!imagen) {
+    imagen = "https://images.unsplash.com/photo-1509114397022-ed747cca3f65?w=500";
+  }
 
-        function darLike(boton, id) {
-            let contadorElemento = boton.querySelector('.contador');
-            let textoElemento = boton.querySelector('.texto-like');
+  const { error } = await _supabase
+    .from("peliculas")
+    .insert([{ titulo, genero, imagen, sinopsis }]);
 
-            if (boton.classList.contains('like-activo')) {
-                boton.classList.remove('like-activo');
-                contadorElemento.innerText = "0";
-                textoElemento.innerText = "Me gusta";
-                localStorage.removeItem(id);
-            } else {
-                boton.classList.add('like-activo');
-                contadorElemento.innerText = "1";
-                textoElemento.innerText = "¡Te gusta!";
-                localStorage.setItem(id, "activo");
-            }
-        }
+  if (error) {
+    alert("Error al guardar: " + error.message);
+  } else {
+    alert("¡Película agregada con éxito!");
+    document.getElementById("titulo").value = "";
+    document.getElementById("genero").value = "";
+    document.getElementById("imagen").value = "";
+    document.getElementById("sinopsis").value = "";
+  }
+}
 
-        function filtrarPeliculas() {
-            let textoBusqueda = document.getElementById('buscador').value.toLowerCase();
-            let tarjetas = document.querySelectorAll('.tarjeta');
-            tarjetas.forEach(function(tarjeta) {
-                let contenido = tarjeta.innerText.toLowerCase();
-                tarjeta.style.display = contenido.includes(textoBusqueda) ? "block" : "none";
-            });
-        }
-    </script>
+function escucharCambiosEnTiempoReal() {
+  _supabase
+    .channel("cambios-peliculas")
+    .on("postgres_changes", { event: "*", schema: "public", table: "peliculas" }, () => {
+      cargarPeliculas();
+    })
+    .subscribe();
+}
+
+function darLike(boton, id) {
+  let contadorElemento = boton.querySelector('.contador');
+  let textoElemento = boton.querySelector('.texto-like');
+
+  if (boton.classList.contains('like-activo')) {
+    boton.classList.remove('like-activo');
+    contadorElemento.innerText = "0";
+    textoElemento.innerText = "Me gusta";
+    localStorage.removeItem(id);
+  } else {
+    boton.classList.add('like-activo');
+    contadorElemento.innerText = "1";
+    textoElemento.innerText = "¡Te gusta!";
+    localStorage.setItem(id, "activo");
+  }
+}
+
+function filtrarPeliculas() {
+  let textoBusqueda = document.getElementById('buscador').value.toLowerCase();
+  let tarjetas = document.querySelectorAll('.tarjeta');
+  tarjetas.forEach(function(tarjeta) {
+    let contenido = tarjeta.innerText.toLowerCase();
+    tarjeta.style.display = contenido.includes(textoBusqueda) ? "block" : "none";
+  });
+    }
+    
 </body>
     </html>
     
