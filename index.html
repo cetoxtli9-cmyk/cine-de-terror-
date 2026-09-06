@@ -12,23 +12,49 @@
             margin: 0;
             padding: 20px;
         }
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 500px;
+            margin: 0 auto 10px auto;
+        }
         h1 {
             color: #e50914;
             text-align: center;
             text-transform: uppercase;
             letter-spacing: 2px;
-            margin-bottom: 20px;
+            margin: 0;
+            font-size: 24px;
+        }
+        .btn-admin-toggle {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            color: #aaa;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .contenedor-principal {
             max-width: 500px;
             margin: 0 auto;
         }
+        /* El formulario inicia oculto */
         .formulario-card {
+            display: none;
             background-color: #1a1a1a;
             border: 1px solid #e50914;
             border-radius: 8px;
             padding: 15px;
             margin-bottom: 25px;
+        }
+        .formulario-card.activo {
+            display: block;
         }
         .formulario-card h3 {
             margin-top: 0;
@@ -129,11 +155,15 @@
 </head>
 <body>
 
-    <div class="contenedor-principal">
-        <h1>Cine de Terror</h1>
+    <div class="header-top">
+        <div style="width: 36px;"></div> <h1>Cine de Terror</h1>
+        <button class="btn-admin-toggle" onclick="toggleAdminPanel()" title="Modo Administrador">🔒</button>
+    </div>
 
-        <div class="formulario-card">
-            <h3>🎬 Agregar Nueva Película</h3>
+    <div class="contenedor-principal">
+
+        <div class="formulario-card" id="formularioAdmin">
+            <h3>🎬 Agregar Nueva Película (Admin)</h3>
             <div class="campo">
                 <input type="text" id="titulo" placeholder="Título de la película">
             </div>
@@ -161,6 +191,9 @@
     </div>
 
     <script>
+        // Cambia aquí tu contraseña secreta
+        const CLAVE_ADMIN = "teamolesly@";
+
         const peliculasIniciales = [
             {
                 id: "peli_exorcista",
@@ -186,6 +219,21 @@
             }
             renderizarCatalogo(peliculasGuardadas);
         });
+
+        function toggleAdminPanel() {
+            const form = document.getElementById("formularioAdmin");
+            
+            if (form.classList.contains("activo")) {
+                form.classList.remove("activo");
+            } else {
+                let pass = prompt("Introduce la contraseña de Administrador:");
+                if (pass === CLAVE_ADMIN) {
+                    form.classList.add("activo");
+                } else if (pass !== null) {
+                    alert("Contraseña incorrecta");
+                }
+            }
+        }
 
         function renderizarCatalogo(listaPeliculas) {
             const catalogo = document.getElementById("catalogo");
@@ -241,6 +289,7 @@
             document.getElementById("sinopsis").value = "";
 
             renderizarCatalogo(peliculasGuardadas);
+            alert("¡Película agregada con éxito!");
         }
 
         function darLike(boton, id) {
@@ -270,4 +319,5 @@
         }
     </script>
 </body>
-</html>
+    </html>
+    
