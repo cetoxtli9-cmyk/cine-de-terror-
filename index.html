@@ -8,11 +8,10 @@
         body {
             background-color: #0d0d0d;
             color: #ffffff;
-            font-family: 'Arial', sans-serif;
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 20px;
         }
-
         h1 {
             color: #e50914;
             text-align: center;
@@ -20,13 +19,10 @@
             letter-spacing: 2px;
             margin-bottom: 20px;
         }
-
         .contenedor-principal {
             max-width: 500px;
             margin: 0 auto;
         }
-
-        /* Estilos del Formulario */
         .formulario-card {
             background-color: #1a1a1a;
             border: 1px solid #e50914;
@@ -34,17 +30,14 @@
             padding: 15px;
             margin-bottom: 25px;
         }
-
         .formulario-card h3 {
             margin-top: 0;
             color: #e50914;
             text-align: center;
         }
-
         .campo {
             margin-bottom: 12px;
         }
-
         .campo input, .campo textarea {
             width: 100%;
             padding: 10px;
@@ -54,13 +47,10 @@
             color: #fff;
             box-sizing: border-box;
             outline: none;
-            font-family: inherit;
         }
-
         .campo input:focus, .campo textarea:focus {
             border-color: #e50914;
         }
-
         .btn-agregar {
             width: 100%;
             background-color: #e50914;
@@ -72,8 +62,6 @@
             font-size: 15px;
             cursor: pointer;
         }
-
-        /* Buscador */
         .input-buscador {
             width: 100%;
             padding: 12px 16px;
@@ -86,24 +74,18 @@
             outline: none;
             margin-bottom: 25px;
         }
-
-        /* Catálogo y Tarjetas */
         .catalogo {
             display: flex;
             flex-direction: column;
             gap: 20px;
         }
-
         .tarjeta {
             background-color: #1a1a1a;
             border: 1px solid #333;
             border-radius: 8px;
             padding: 15px;
-            box-shadow: 0 4px 10px rgba(229, 9, 20, 0.2);
             text-align: center;
-            position: relative;
         }
-
         .poster {
             width: 100%;
             max-height: 350px;
@@ -111,12 +93,10 @@
             border-radius: 6px;
             margin-bottom: 10px;
         }
-
         .tarjeta h2 {
             margin: 10px 0 5px 0;
             color: #ff4d4d;
         }
-
         .genero {
             font-size: 12px;
             background-color: #333;
@@ -124,14 +104,12 @@
             border-radius: 4px;
             color: #ccc;
         }
-
         .sinopsis {
             color: #aaa;
             font-size: 14px;
             line-height: 1.4;
             text-align: left;
         }
-
         .btn-like {
             background-color: #222;
             color: #fff;
@@ -140,10 +118,8 @@
             border-radius: 20px;
             font-size: 14px;
             cursor: pointer;
-            transition: all 0.3s ease;
             margin-top: 10px;
         }
-
         .btn-like.like-activo {
             background-color: #e50914;
             color: white;
@@ -156,7 +132,6 @@
     <div class="contenedor-principal">
         <h1>Cine de Terror</h1>
 
-        <!-- Formulario para agregar película -->
         <div class="formulario-card">
             <h3>🎬 Agregar Nueva Película</h3>
             <div class="campo">
@@ -174,21 +149,18 @@
             <button class="btn-agregar" onclick="agregarPelicula()">+ Agregar al Catálogo</button>
         </div>
 
-        <!-- Buscador -->
         <input 
             type="text" 
             id="buscador" 
             class="input-buscador" 
-            placeholder="🔍 Buscar película o género..." 
+            placeholder="🔍 Buscar película..." 
             onkeyup="filtrarPeliculas()"
         >
 
-        <!-- Catálogo de Películas -->
         <div class="catalogo" id="catalogo"></div>
     </div>
 
     <script>
-        // Películas iniciales por defecto
         const peliculasIniciales = [
             {
                 id: "peli_exorcista",
@@ -206,27 +178,20 @@
             }
         ];
 
-        // Cargar películas al abrir la página
         document.addEventListener("DOMContentLoaded", function() {
             let peliculasGuardadas = JSON.parse(localStorage.getItem("mis_peliculas"));
-
-            // Si no hay películas creadas por el usuario, carga las por defecto
             if (!peliculasGuardadas) {
                 peliculasGuardadas = peliculasIniciales;
                 localStorage.setItem("mis_peliculas", JSON.stringify(peliculasGuardadas));
             }
-
             renderizarCatalogo(peliculasGuardadas);
         });
 
-        // Mostrar películas en el HTML
         function renderizarCatalogo(listaPeliculas) {
             const catalogo = document.getElementById("catalogo");
             catalogo.innerHTML = "";
-
             listaPeliculas.forEach(peli => {
                 let likeEstado = localStorage.getItem(peli.id) === "activo";
-
                 let tarjetaHTML = `
                     <div class="tarjeta" data-id="${peli.id}">
                         <img src="${peli.imagen}" class="poster" onerror="this.src='https://images.unsplash.com/photo-1509114397022-ed747cca3f65?w=500'">
@@ -243,7 +208,6 @@
             });
         }
 
-        // Agregar nueva película desde el formulario
         function agregarPelicula() {
             let titulo = document.getElementById("titulo").value.trim();
             let genero = document.getElementById("genero").value.trim();
@@ -251,11 +215,10 @@
             let sinopsis = document.getElementById("sinopsis").value.trim();
 
             if (!titulo || !genero || !sinopsis) {
-                alert("Por favor completa al menos el título, género y sinopsis.");
+                alert("Por favor completa título, género y sinopsis.");
                 return;
             }
 
-            // Si no pone imagen, asigna una por defecto
             if (!imagen) {
                 imagen = "https://images.unsplash.com/photo-1509114397022-ed747cca3f65?w=500";
             }
@@ -269,10 +232,9 @@
             };
 
             let peliculasGuardadas = JSON.parse(localStorage.getItem("mis_peliculas")) || [];
-            peliculasGuardadas.unshift(nuevaPeli); // La agrega al inicio de la lista
+            peliculasGuardadas.unshift(nuevaPeli);
             localStorage.setItem("mis_peliculas", JSON.stringify(peliculasGuardadas));
 
-            // Limpiar formulario y actualizar vista
             document.getElementById("titulo").value = "";
             document.getElementById("genero").value = "";
             document.getElementById("imagen").value = "";
@@ -281,7 +243,6 @@
             renderizarCatalogo(peliculasGuardadas);
         }
 
-        // Función de Like
         function darLike(boton, id) {
             let contadorElemento = boton.querySelector('.contador');
             let textoElemento = boton.querySelector('.texto-like');
@@ -299,21 +260,14 @@
             }
         }
 
-        // Buscador
         function filtrarPeliculas() {
             let textoBusqueda = document.getElementById('buscador').value.toLowerCase();
             let tarjetas = document.querySelectorAll('.tarjeta');
-
             tarjetas.forEach(function(tarjeta) {
                 let contenido = tarjeta.innerText.toLowerCase();
-                if (contenido.includes(textoBusqueda)) {
-                    tarjeta.style.display = "block";
-                } else {
-                    tarjeta.style.display = "none";
-                }
+                tarjeta.style.display = contenido.includes(textoBusqueda) ? "block" : "none";
             });
         }
     </script>
-
 </body>
 </html>
