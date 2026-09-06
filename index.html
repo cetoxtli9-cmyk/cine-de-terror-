@@ -21,33 +21,77 @@
             margin-bottom: 20px;
         }
 
-        .contenedor-buscador {
+        .contenedor-principal {
             max-width: 500px;
-            margin: 0 auto 25px auto;
+            margin: 0 auto;
         }
 
+        /* Estilos del Formulario */
+        .formulario-card {
+            background-color: #1a1a1a;
+            border: 1px solid #e50914;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 25px;
+        }
+
+        .formulario-card h3 {
+            margin-top: 0;
+            color: #e50914;
+            text-align: center;
+        }
+
+        .campo {
+            margin-bottom: 12px;
+        }
+
+        .campo input, .campo textarea {
+            width: 100%;
+            padding: 10px;
+            background-color: #0d0d0d;
+            border: 1px solid #333;
+            border-radius: 5px;
+            color: #fff;
+            box-sizing: border-box;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .campo input:focus, .campo textarea:focus {
+            border-color: #e50914;
+        }
+
+        .btn-agregar {
+            width: 100%;
+            background-color: #e50914;
+            color: #fff;
+            border: none;
+            padding: 12px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        /* Buscador */
         .input-buscador {
             width: 100%;
             padding: 12px 16px;
             font-size: 16px;
             background-color: #1a1a1a;
-            border: 1px solid #e50914;
+            border: 1px solid #333;
             border-radius: 25px;
             color: #ffffff;
             box-sizing: border-box;
             outline: none;
+            margin-bottom: 25px;
         }
 
-        .input-buscador::placeholder {
-            color: #888;
-        }
-
+        /* Catálogo y Tarjetas */
         .catalogo {
             display: flex;
             flex-direction: column;
             gap: 20px;
-            max-width: 500px;
-            margin: 0 auto;
         }
 
         .tarjeta {
@@ -57,6 +101,7 @@
             padding: 15px;
             box-shadow: 0 4px 10px rgba(229, 9, 20, 0.2);
             text-align: center;
+            position: relative;
         }
 
         .poster {
@@ -108,9 +153,28 @@
 </head>
 <body>
 
-    <h1>Películas de Terror</h1>
+    <div class="contenedor-principal">
+        <h1>Cine de Terror</h1>
 
-    <div class="contenedor-buscador">
+        <!-- Formulario para agregar película -->
+        <div class="formulario-card">
+            <h3>🎬 Agregar Nueva Película</h3>
+            <div class="campo">
+                <input type="text" id="titulo" placeholder="Título de la película">
+            </div>
+            <div class="campo">
+                <input type="text" id="genero" placeholder="Género (ej. Paranormal, Slasher)">
+            </div>
+            <div class="campo">
+                <input type="text" id="imagen" placeholder="URL de la imagen (póster)">
+            </div>
+            <div class="campo">
+                <textarea id="sinopsis" rows="3" placeholder="Sinopsis breve..."></textarea>
+            </div>
+            <button class="btn-agregar" onclick="agregarPelicula()">+ Agregar al Catálogo</button>
+        </div>
+
+        <!-- Buscador -->
         <input 
             type="text" 
             id="buscador" 
@@ -118,71 +182,107 @@
             placeholder="🔍 Buscar película o género..." 
             onkeyup="filtrarPeliculas()"
         >
-    </div>
 
-    <div class="catalogo" id="catalogo">
-
-        <!-- Película 1 -->
-        <div class="tarjeta" data-id="peli_exorcista">
-            <img src="https://images.unsplash.com/photo-1509248961158-e54f6934749c?w=500" class="poster">
-            <h2>El Exorcista</h2>
-            <span class="genero">Posesión / Paranormal</span>
-            <p class="sinopsis">Una niña es poseída por una entidad demoníaca y su madre busca la ayuda de dos sacerdotes.</p>
-            <button class="btn-like" onclick="darLike(this)">
-                ❤️ <span class="texto-like">Me gusta</span> (<span class="contador">0</span>)
-            </button>
-        </div>
-
-        <!-- Película 2 -->
-        <div class="tarjeta" data-id="peli_conjuro">
-            <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500" class="poster">
-            <h2>El Conjuro</h2>
-            <span class="genero">Sobrenatural</span>
-            <p class="sinopsis">Investigadores paranormales ayudan a una familia aterrorizada por una presencia oscura.</p>
-            <button class="btn-like" onclick="darLike(this)">
-                ❤️ <span class="texto-like">Me gusta</span> (<span class="contador">0</span>)
-            </button>
-        </div>
-
-        <!-- Película 3 -->
-        <div class="tarjeta" data-id="peli_siniestro">
-            <img src="https://images.unsplash.com/photo-1509114397022-ed747cca3f65?w=500" class="poster">
-            <h2>Siniestro</h2>
-            <span class="genero">Misterio / Psicológico</span>
-            <p class="sinopsis">Un escritor de crímenes reales descubre una caja de grabaciones caseras que ponen en peligro a su familia.</p>
-            <button class="btn-like" onclick="darLike(this)">
-                ❤️ <span class="texto-like">Me gusta</span> (<span class="contador">0</span>)
-            </button>
-        </div>
-
+        <!-- Catálogo de Películas -->
+        <div class="catalogo" id="catalogo"></div>
     </div>
 
     <script>
-        // Cargar los likes guardados en cuanto se abre la página
+        // Películas iniciales por defecto
+        const peliculasIniciales = [
+            {
+                id: "peli_exorcista",
+                titulo: "El Exorcista",
+                genero: "Posesión / Paranormal",
+                imagen: "https://images.unsplash.com/photo-1509248961158-e54f6934749c?w=500",
+                sinopsis: "Una niña es poseída por una entidad demoníaca y su madre busca la ayuda de dos sacerdotes."
+            },
+            {
+                id: "peli_conjuro",
+                titulo: "El Conjuro",
+                genero: "Sobrenatural",
+                imagen: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500",
+                sinopsis: "Investigadores paranormales ayudan a una familia aterrorizada por una presencia oscura."
+            }
+        ];
+
+        // Cargar películas al abrir la página
         document.addEventListener("DOMContentLoaded", function() {
-            let tarjetas = document.querySelectorAll('.tarjeta');
+            let peliculasGuardadas = JSON.parse(localStorage.getItem("mis_peliculas"));
 
-            tarjetas.forEach(function(tarjeta) {
-                let id = tarjeta.getAttribute('data-id');
-                let guardado = localStorage.getItem(id);
+            // Si no hay películas creadas por el usuario, carga las por defecto
+            if (!peliculasGuardadas) {
+                peliculasGuardadas = peliculasIniciales;
+                localStorage.setItem("mis_peliculas", JSON.stringify(peliculasGuardadas));
+            }
 
-                if (guardado === "activo") {
-                    let boton = tarjeta.querySelector('.btn-like');
-                    let contadorElemento = boton.querySelector('.contador');
-                    let textoElemento = boton.querySelector('.texto-like');
-
-                    boton.classList.add('like-activo');
-                    contadorElemento.innerText = "1";
-                    textoElemento.innerText = "¡Te gusta!";
-                }
-            });
+            renderizarCatalogo(peliculasGuardadas);
         });
 
-        // Función para cambiar estado y guardar en localStorage
-        function darLike(boton) {
-            let tarjeta = boton.closest('.tarjeta');
-            let id = tarjeta.getAttribute('data-id');
+        // Mostrar películas en el HTML
+        function renderizarCatalogo(listaPeliculas) {
+            const catalogo = document.getElementById("catalogo");
+            catalogo.innerHTML = "";
 
+            listaPeliculas.forEach(peli => {
+                let likeEstado = localStorage.getItem(peli.id) === "activo";
+
+                let tarjetaHTML = `
+                    <div class="tarjeta" data-id="${peli.id}">
+                        <img src="${peli.imagen}" class="poster" onerror="this.src='https://images.unsplash.com/photo-1509114397022-ed747cca3f65?w=500'">
+                        <h2>${peli.titulo}</h2>
+                        <span class="genero">${peli.genero}</span>
+                        <p class="sinopsis">${peli.sinopsis}</p>
+                        <button class="btn-like ${likeEstado ? 'like-activo' : ''}" onclick="darLike(this, '${peli.id}')">
+                            ❤️ <span class="texto-like">${likeEstado ? '¡Te gusta!' : 'Me gusta'}</span> 
+                            (<span class="contador">${likeEstado ? '1' : '0'}</span>)
+                        </button>
+                    </div>
+                `;
+                catalogo.innerHTML += tarjetaHTML;
+            });
+        }
+
+        // Agregar nueva película desde el formulario
+        function agregarPelicula() {
+            let titulo = document.getElementById("titulo").value.trim();
+            let genero = document.getElementById("genero").value.trim();
+            let imagen = document.getElementById("imagen").value.trim();
+            let sinopsis = document.getElementById("sinopsis").value.trim();
+
+            if (!titulo || !genero || !sinopsis) {
+                alert("Por favor completa al menos el título, género y sinopsis.");
+                return;
+            }
+
+            // Si no pone imagen, asigna una por defecto
+            if (!imagen) {
+                imagen = "https://images.unsplash.com/photo-1509114397022-ed747cca3f65?w=500";
+            }
+
+            let nuevaPeli = {
+                id: "peli_" + Date.now(),
+                titulo: titulo,
+                genero: genero,
+                imagen: imagen,
+                sinopsis: sinopsis
+            };
+
+            let peliculasGuardadas = JSON.parse(localStorage.getItem("mis_peliculas")) || [];
+            peliculasGuardadas.unshift(nuevaPeli); // La agrega al inicio de la lista
+            localStorage.setItem("mis_peliculas", JSON.stringify(peliculasGuardadas));
+
+            // Limpiar formulario y actualizar vista
+            document.getElementById("titulo").value = "";
+            document.getElementById("genero").value = "";
+            document.getElementById("imagen").value = "";
+            document.getElementById("sinopsis").value = "";
+
+            renderizarCatalogo(peliculasGuardadas);
+        }
+
+        // Función de Like
+        function darLike(boton, id) {
             let contadorElemento = boton.querySelector('.contador');
             let textoElemento = boton.querySelector('.texto-like');
 
@@ -190,18 +290,16 @@
                 boton.classList.remove('like-activo');
                 contadorElemento.innerText = "0";
                 textoElemento.innerText = "Me gusta";
-                // Elimina el registro guardado
                 localStorage.removeItem(id);
             } else {
                 boton.classList.add('like-activo');
                 contadorElemento.innerText = "1";
                 textoElemento.innerText = "¡Te gusta!";
-                // Guarda el registro con valor "activo"
                 localStorage.setItem(id, "activo");
             }
         }
 
-        // Función para el Buscador
+        // Buscador
         function filtrarPeliculas() {
             let textoBusqueda = document.getElementById('buscador').value.toLowerCase();
             let tarjetas = document.querySelectorAll('.tarjeta');
