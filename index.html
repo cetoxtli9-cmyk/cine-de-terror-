@@ -1,353 +1,269 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cine de Terror</title>
-    <style>
-        body {
-            background-color: #0d0d0d;
-            color: #ffffff;
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-        }
-        .header-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 500px;
-            margin: 0 auto 10px auto;
-        }
-        h1 {
-            color: #e50914;
-            text-align: center;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin: 0;
-            font-size: 24px;
-        }
-        .btn-admin-toggle {
-            background: #1a1a1a;
-            border: 1px solid #333;
-            color: #aaa;
-            border-radius: 50%;
-            width: 36px;
-            height: 36px;
-            cursor: pointer;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .contenedor-principal {
-            max-width: 500px;
-            margin: 0 auto;
-        }
-        /* El formulario inicia oculto */
-        .formulario-card {
-            display: none;
-            background-color: #1a1a1a;
-            border: 1px solid #e50914;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 25px;
-        }
-        .formulario-card.activo {
-            display: block;
-        }
-        .formulario-card h3 {
-            margin-top: 0;
-            color: #e50914;
-            text-align: center;
-        }
-        .campo {
-            margin-bottom: 12px;
-        }
-        .campo input, .campo textarea {
-            width: 100%;
-            padding: 10px;
-            background-color: #0d0d0d;
-            border: 1px solid #333;
-            border-radius: 5px;
-            color: #fff;
-            box-sizing: border-box;
-            outline: none;
-        }
-        .campo input:focus, .campo textarea:focus {
-            border-color: #e50914;
-        }
-        .btn-agregar {
-            width: 100%;
-            background-color: #e50914;
-            color: #fff;
-            border: none;
-            padding: 12px;
-            border-radius: 5px;
-            font-weight: bold;
-            font-size: 15px;
-            cursor: pointer;
-        }
-        .input-buscador {
-            width: 100%;
-            padding: 12px 16px;
-            font-size: 16px;
-            background-color: #1a1a1a;
-            border: 1px solid #333;
-            border-radius: 25px;
-            color: #ffffff;
-            box-sizing: border-box;
-            outline: none;
-            margin-bottom: 25px;
-        }
-        .catalogo {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-        .tarjeta {
-            background-color: #1a1a1a;
-            border: 1px solid #333;
-            border-radius: 8px;
-            padding: 15px;
-            text-align: center;
-        }
-        .poster {
-            width: 100%;
-            max-height: 350px;
-            object-fit: cover;
-            border-radius: 6px;
-            margin-bottom: 10px;
-        }
-        .tarjeta h2 {
-            margin: 10px 0 5px 0;
-            color: #ff4d4d;
-        }
-        .genero {
-            font-size: 12px;
-            background-color: #333;
-            padding: 4px 8px;
-            border-radius: 4px;
-            color: #ccc;
-        }
-        .sinopsis {
-            color: #aaa;
-            font-size: 14px;
-            line-height: 1.4;
-            text-align: left;
-        }
-        .btn-like {
-            background-color: #222;
-            color: #fff;
-            border: 1px solid #e50914;
-            padding: 10px 16px;
-            border-radius: 20px;
-            font-size: 14px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        .btn-like.like-activo {
-            background-color: #e50914;
-            color: white;
-            font-weight: bold;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cine de Terror</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: #ffffff;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #e50914;
+    }
+    .contenedor-principal {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .panel-admin, .buscador-sec {
+      background-color: #1e1e1e;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    input, textarea, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 8px;
+      margin-bottom: 8px;
+      border-radius: 5px;
+      border: 1px solid #333;
+      box-sizing: border-box;
+      background-color: #2b2b2b;
+      color: #fff;
+    }
+    button {
+      background-color: #e50914;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+    }
+    button:hover {
+      background-color: #b20710;
+    }
+    .catalogo {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+    }
+    .tarjeta {
+      background-color: #1e1e1e;
+      border-radius: 8px;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+    }
+    .poster {
+      width: 100%;
+      height: 320px;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+    .genero {
+      color: #e50914;
+      font-size: 0.9em;
+      font-weight: bold;
+    }
+    .sinopsis {
+      font-size: 0.9em;
+      color: #ccc;
+      flex-grow: 1;
+    }
+    .video-contenedor {
+      margin-top: 10px;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+    .btn-like {
+      background-color: #333;
+      margin-top: 10px;
+    }
+    .like-activo {
+      background-color: #e50914;
+    }
+  </style>
 </head>
 <body>
 
-    <div class="header-top">
-        <div style="width: 36px;"></div> <h1>Cine de Terror</h1>
-        <button class="btn-admin-toggle" onclick="toggleAdminPanel()" title="Modo Administrador">🔒</button>
+  <div class="contenedor-principal">
+    <h1>Cine de Terror</h1>
+
+    <!-- Panel de Agregar Película -->
+    <div class="panel-admin">
+      <h3>Agregar Película</h3>
+      <input type="text" id="titulo" placeholder="Título de la película">
+      <input type="text" id="genero" placeholder="Género (ej. Slasher, Paranormal)">
+      <input type="url" id="imagen" placeholder="URL de la imagen del póster">
+      <input type="url" id="video" placeholder="URL del fragmento o tráiler (YouTube)">
+      <textarea id="sinopsis" rows="3" placeholder="Sinopsis"></textarea>
+      <input type="password" id="pinAdmin" placeholder="PIN de Administrador">
+      <button onclick="agregarPelicula()">Publicar Película</button>
     </div>
 
-    <div class="contenedor-principal">
-
-        <div class="formulario-card" id="formularioAdmin">
-            <h3>🎬 Agregar Nueva Película (Admin)</h3>
-            <div class="campo">
-                <input type="text" id="titulo" placeholder="Título de la película">
-            </div>
-            <div class="campo">
-                <input type="text" id="genero" placeholder="Género (ej. Paranormal, Slasher)">
-            </div>
-            <div class="campo">
-                <input type="text" id="imagen" placeholder="URL de la imagen (póster)">
-            </div>
-            <div class="campo">
-                <textarea id="sinopsis" rows="3" placeholder="Sinopsis breve..."></textarea>
-            </div>
-            <button class="btn-agregar" onclick="agregarPelicula()">+ Agregar al Catálogo</button>
-        </div>
-
-        <input 
-            type="text" 
-            id="buscador" 
-            class="input-buscador" 
-            placeholder="🔍 Buscar película..." 
-            onkeyup="filtrarPeliculas()"
-        >
-
-        <div class="catalogo" id="catalogo"></div>
+    <!-- Buscador -->
+    <div class="buscador-sec">
+      <input type="text" id="buscador" placeholder="Buscar película..." onkeyup="filtrarPeliculas()">
     </div>
 
-    <script>
-        // Cambia aquí tu contraseña secreta
-        const CLAVE_ADMIN = "teamolesly@";
+    <!-- Catálogo de Películas -->
+    <div id="catalogo" class="catalogo"></div>
+  </div>
 
-        const peliculasIniciales = [
-            {
-                id: "peli_exorcista",
-                titulo: "El Exorcista",
-                genero: "Posesión / Paranormal",
-                imagen: "https://images.unsplash.com/photo-1509248961158-e54f6934749c?w=500",
-                sinopsis: "Una niña es poseída por una entidad demoníaca y su madre busca la ayuda de dos sacerdotes."
-            },
-            {
-                id: "peli_conjuro",
-                titulo: "El Conjuro",
-                genero: "Sobrenatural",
-                imagen: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500",
-                sinopsis: "Investigadores paranormales ayudan a una familia aterrorizada por una presencia oscura."
-            }
-        ];
+  <!-- Cargar librería de Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // Configuración de Supabase
+    const SUPABASE_URL = "https://ctrmjdwwvyxpzwgqsapd.supabase.co";
+    const SUPABASE_KEY = "Sb_publishable_9WPjJ6rpXsGzXyT0rYBhGw_DeRMp99_";
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        document.addEventListener("DOMContentLoaded", function() {
-            let peliculasGuardadas = JSON.parse(localStorage.getItem("mis_peliculas"));
-            if (!peliculasGuardadas) {
-                peliculasGuardadas = peliculasIniciales;
-                localStorage.setItem("mis_peliculas", JSON.stringify(peliculasGuardadas));
-            }
-            renderizarCatalogo(peliculasGuardadas);
-        });
-
-        function toggleAdminPanel() {
-            const form = document.getElementById("formularioAdmin");
-            
-            if (form.classList.contains("activo")) {
-                form.classList.remove("activo");
-            } else {
-                let pass = prompt("Introduce la contraseña de Administrador:");
-                if (pass === CLAVE_ADMIN) {
-                    form.classList.add("activo");
-                } else if (pass !== null) {
-                    alert("Contraseña incorrecta");
-                }
-            }
-        }
-
-        function renderizarCatalogo(listaPeliculas) {
-            const catalogo = document.getElementById("catalogo");
-            catalogo.innerHTML = "";
-            listaPeliculas.forEach(peli => {
-                let likeEstado = localStorage.getItem(peli.id) === "activo";
-                let tarjetaHTML = `
-                    <div class="tarjeta" data-id="${peli.id}">
-                        <img src="${peli.imagen}" class="poster" onerror="this.src='https://images.unsplash.com/photo-1509114397022-ed747cca3f65?w=500'">
-                        <h2>${peli.titulo}</h2>
-                        <span class="genero">${peli.genero}</span>
-                        <p class="sinopsis">${peli.sinopsis}</p>
-                        <button class="btn-like ${likeEstado ? 'like-activo' : ''}" onclick="darLike(this, '${peli.id}')">
-                            ❤️ <span class="texto-like">${likeEstado ? '¡Te gusta!' : 'Me gusta'}</span> 
-                            (<span class="contador">${likeEstado ? '1' : '0'}</span>)
-                        </button>
-                    </div>
-                `;
-                catalogo.innerHTML += tarjetaHTML;
-            });
-        }
-// Cargar librería de Supabase
-</script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-
-// Configuración de Supabase
-const SUPABASE_URL = "https://ctrmjdwwvyxpzwgqsapd.supabase.co";
-const SUPABASE_KEY = "Sb_publishable_9WPjJ6rpXsGzXyT0rYBhGw_DeRMp99_";
-const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-document.addEventListener("DOMContentLoaded", () => {
-  cargarPeliculas();
-  escucharCambiosEnTiempoReal();
-});
-
-async function cargarPeliculas() {
-  const { data, error } = await _supabase
-    .from("peliculas")
-    .select("*")
-    .order("id", { ascending: false });
-
-  if (error) {
-    console.error("Error al cargar:", error.message);
-    return;
-  }
-  renderizarCatalogo(data);
-}
-
-async function agregarPelicula() {
-  let titulo = document.getElementById("titulo").value.trim();
-  let genero = document.getElementById("genero").value.trim();
-  let imagen = document.getElementById("imagen").value.trim();
-  let sinopsis = document.getElementById("sinopsis").value.trim();
-
-  if (!titulo || !genero || !sinopsis) {
-    alert("Por favor completa título, género y sinopsis.");
-    return;
-  }
-
-  if (!imagen) {
-    imagen = "https://images.unsplash.com/photo-1509114397022-ed747cca3f65?w=500";
-  }
-
-  const { error } = await _supabase
-    .from("peliculas")
-    .insert([{ titulo, genero, imagen, sinopsis }]);
-
-  if (error) {
-    alert("Error al guardar: " + error.message);
-  } else {
-    alert("¡Película agregada con éxito!");
-    document.getElementById("titulo").value = "";
-    document.getElementById("genero").value = "";
-    document.getElementById("imagen").value = "";
-    document.getElementById("sinopsis").value = "";
-  }
-}
-
-function escucharCambiosEnTiempoReal() {
-  _supabase
-    .channel("cambios-peliculas")
-    .on("postgres_changes", { event: "*", schema: "public", table: "peliculas" }, () => {
+    // Cargar al iniciar
+    document.addEventListener("DOMContentLoaded", () => {
       cargarPeliculas();
-    })
-    .subscribe();
-}
+      escucharCambiosEnTiempoReal();
+    });
 
-function darLike(boton, id) {
-  let contadorElemento = boton.querySelector('.contador');
-  let textoElemento = boton.querySelector('.texto-like');
+    // Obtener películas de Supabase
+    async function cargarPeliculas() {
+      const { data, error } = await _supabase
+        .from("peliculas")
+        .select("*")
+        .order("id", { ascending: false });
 
-  if (boton.classList.contains('like-activo')) {
-    boton.classList.remove('like-activo');
-    contadorElemento.innerText = "0";
-    textoElemento.innerText = "Me gusta";
-    localStorage.removeItem(id);
-  } else {
-    boton.classList.add('like-activo');
-    contadorElemento.innerText = "1";
-    textoElemento.innerText = "¡Te gusta!";
-    localStorage.setItem(id, "activo");
-  }
-}
-
-function filtrarPeliculas() {
-  let textoBusqueda = document.getElementById('buscador').value.toLowerCase();
-  let tarjetas = document.querySelectorAll('.tarjeta');
-  tarjetas.forEach(function(tarjeta) {
-    let contenido = tarjeta.innerText.toLowerCase();
-    tarjeta.style.display = contenido.includes(textoBusqueda) ? "block" : "none";
-  });
+      if (error) {
+        console.error("Error al cargar:", error.message);
+        return;
+      }
+      renderizarCatalogo(data);
     }
-    
+
+    // Renderizar tarjetas en pantalla
+    function renderizarCatalogo(peliculas) {
+      const catalogo = document.getElementById("catalogo");
+      catalogo.innerHTML = "";
+
+      peliculas.forEach((peli) => {
+        let videoHTML = "";
+        if (peli.video) {
+          let videoUrl = peli.video;
+          if (videoUrl.includes("watch?v=")) {
+            videoUrl = videoUrl.replace("watch?v=", "embed/");
+          } else if (videoUrl.includes("youtu.be/")) {
+            videoUrl = videoUrl.replace("youtu.be/", "www.youtube.com/embed/");
+          }
+
+          videoHTML = `
+            <div class="video-contenedor">
+              <iframe 
+                width="100%" 
+                height="180" 
+                src="${videoUrl}" 
+                title="Fragmento de ${peli.titulo}" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen>
+              </iframe>
+            </div>
+          `;
+        }
+
+        const likeEstado = localStorage.getItem(peli.id);
+
+        const tarjetaHTML = `
+          <div class="tarjeta">
+            <img src="${peli.imagen}" class="poster" onerror="this.src='https://images.unsplash.com/photo-1509114397022-ed747cca3f65?w=500'">
+            <h2>${peli.titulo}</h2>
+            <span class="genero">${peli.genero}</span>
+            <p class="sinopsis">${peli.sinopsis}</p>
+            ${videoHTML}
+            <button class="btn-like ${likeEstado ? 'like-activo' : ''}" onclick="darLike(this, '${peli.id}')">
+              ❤️ <span class="texto-like">${likeEstado ? '¡Te gusta!' : 'Me gusta'}</span>
+            </button>
+          </div>
+        `;
+        catalogo.innerHTML += tarjetaHTML;
+      });
+    }
+
+    // Guardar nueva película con video
+    async function agregarPelicula() {
+      const pin = document.getElementById("pinAdmin").value;
+      if (pin !== "1234") { // Cambia "1234" por tu PIN real
+        alert("PIN incorrecto. No tienes permiso para agregar películas.");
+        return;
+      }
+
+      let titulo = document.getElementById("titulo").value.trim();
+      let genero = document.getElementById("genero").value.trim();
+      let imagen = document.getElementById("imagen").value.trim();
+      let video = document.getElementById("video").value.trim();
+      let sinopsis = document.getElementById("sinopsis").value.trim();
+
+      if (!titulo || !genero || !sinopsis) {
+        alert("Por favor completa título, género y sinopsis.");
+        return;
+      }
+
+      if (!imagen) {
+        imagen = "https://images.unsplash.com/photo-1509114397022-ed747cca3f65?w=500";
+      }
+
+      const { error } = await _supabase
+        .from("peliculas")
+        .insert([{ titulo, genero, imagen, video, sinopsis }]);
+
+      if (error) {
+        alert("Error al guardar: " + error.message);
+      } else {
+        alert("¡Película agregada con éxito!");
+        document.getElementById("titulo").value = "";
+        document.getElementById("genero").value = "";
+        document.getElementById("imagen").value = "";
+        document.getElementById("video").value = "";
+        document.getElementById("sinopsis").value = "";
+        document.getElementById("pinAdmin").value = "";
+      }
+    }
+
+    // Cambios en tiempo real
+    function escucharCambiosEnTiempoReal() {
+      _supabase
+        .channel("cambios-peliculas")
+        .on("postgres_changes", { event: "*", schema: "public", table: "peliculas" }, () => {
+          cargarPeliculas();
+        })
+        .subscribe();
+    }
+
+    // Sistema de Me gusta local
+    function darLike(boton, id) {
+      let textoElemento = boton.querySelector('.texto-like');
+      if (boton.classList.contains('like-activo')) {
+        boton.classList.remove('like-activo');
+        textoElemento.innerText = "Me gusta";
+        localStorage.removeItem(id);
+      } else {
+        boton.classList.add('like-activo');
+        textoElemento.innerText = "¡Te gusta!";
+        localStorage.setItem(id, "activo");
+      }
+    }
+
+    // Buscador
+    function filtrarPeliculas() {
+      let textoBusqueda = document.getElementById('buscador').value.toLowerCase();
+      let tarjetas = document.querySelectorAll('.tarjeta');
+      tarjetas.forEach(function(tarjeta) {
+        let contenido = tarjeta.innerText.toLowerCase();
+        tarjeta.style.display = contenido.includes(textoBusqueda) ? "block" : "none";
+      });
+    }
+  </script>
 </body>
-    </html>
-    
+</html>
